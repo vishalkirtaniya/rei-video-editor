@@ -94,11 +94,11 @@ export default function Features() {
 
       <div className="features-container">
         {/* Tabs */}
-        <div className="feature-tabs">
+        <div className="modal-labels-row">
           {FEATURE_SECTIONS.map((section) => (
             <div
               key={section.key}
-              className={`tab-item ${
+              className={`modal-label-chip ${
                 activeTab === section.key ? "active" : ""
               }`}
               data-tab={section.key}

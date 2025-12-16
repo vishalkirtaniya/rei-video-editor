@@ -65,6 +65,7 @@ export default function Navbar() {
           <li><a href="#home" className={`nav-link ${activeId === "home" ? "active" : ""}`}>Home</a></li>
           <li><a href="#features" className={`nav-link ${activeId === "features" ? "active" : ""}`}>Edits</a></li>
           <li><a href="#about" className={`nav-link ${activeId === "about" ? "active" : ""}`}>About</a></li>
+          <li><a href="#collaborations" className={`nav-link ${activeId === "collaborations" ? "active" : ""}`}>Collabs</a></li>
           <li><a href="#contact" className={`nav-link ${activeId === "contact" ? "active" : ""}`}>Contact</a></li>
         </ul>
 
