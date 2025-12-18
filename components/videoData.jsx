@@ -120,22 +120,6 @@ export const FEATURE_SECTIONS = [
       },
     ],
   },
-  //   {
-  //     key: "network",
-  //     label: "Adverts",
-  //     format: "adverts",
-  //     videos: [
-  //       // ...
-  //     ],
-  //   },
-  //   {
-  //     key: "analytics",
-  //     label: "Music",
-  //     format: "music",
-  //     videos: [
-  //       // ...
-  //     ],
-  //   },
   {
     key: "integration",
     label: "Gaming",
@@ -167,12 +151,66 @@ export const FEATURE_SECTIONS = [
       },
     ],
   },
-  //   {
-  //     key: "cash_cow",
-  //     label: "Cash Cow",
-  //     format: "cash_cow",
-  //     videos: [
-  //       // ...
-  //     ],
-  //   },
+  {
+    key: "motion_grphics",
+    label: "Motion Graphics",
+    format: "motion_graphics",
+    videos: [
+      {
+        id: 24,
+        title: "Best Suppfinal",
+        thumbnail_link: "https://img.youtube.com/vi/agAeZKiebgU/hqdefault.jpg",
+        video_link: "https://youtube.com/embed/agAeZKiebgU?feature=share",
+      },
+      {
+        id: 25,
+        title: "final1stpartfixed",
+        thumbnail_link: "https://img.youtube.com/vi/vPF8grdKQMo/hqdefault.jpg",
+        video_link: "https://youtube.com/embed/vPF8grdKQMo",
+      },
+      {
+        id: 26,
+        title: "finaltst",
+        thumbnail_link: "https://img.youtube.com/vi/hARFp22ZeBo/hqdefault.jpg",
+        video_link: "https://youtube.com/embed/hARFp22ZeBo",
+      },
+      {
+        id: 27,
+        title: "TWIST",
+        thumbnail_link: "https://img.youtube.com/vi/F5Yi5ix2aas/hqdefault.jpg",
+        video_link: "https://youtube.com/embed/F5Yi5ix2aas",
+      },
+    ],
+  },
+  {
+    key: "3d_animation",
+    label: "3D Animation",
+    format: "3d_animation",
+    videos: [
+      {
+        id: 27,
+        title: "Best Suppfinal",
+        thumbnail_link: "https://img.youtube.com/vi/agAeZKiebgU/hqdefault.jpg",
+        video_link: "https://youtube.com/embed/agAeZKiebgU?feature=share",
+      },
+      {
+        id: 28,
+        title: "final1stpartfixed",
+        thumbnail_link: "https://img.youtube.com/vi/vPF8grdKQMo/hqdefault.jpg",
+        video_link: "https://youtube.com/embed/vPF8grdKQMo",
+      },
+      {
+        id: 29,
+        title: "finaltst",
+        thumbnail_link: "https://img.youtube.com/vi/hARFp22ZeBo/hqdefault.jpg",
+        video_link: "https://youtube.com/embed/hARFp22ZeBo",
+      },
+      {
+        id: 30,
+        title: "TWIST",
+        thumbnail_link: "https://img.youtube.com/vi/F5Yi5ix2aas/hqdefault.jpg",
+        video_link: "https://youtube.com/embed/F5Yi5ix2aas",
+      },
+    ],
+  },
 ];

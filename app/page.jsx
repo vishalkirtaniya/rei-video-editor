@@ -7,6 +7,7 @@ import About from "../components/About";
 import Contact from "../components/Contact";
 import Footer from "../components/Footer";
 import Collaborations from "../components/Collaborations";
+import CreatorServices from "../components/CreatorServices";
 
 export default function Page() {
   return (
@@ -24,6 +25,7 @@ export default function Page() {
       <main>
         <Hero />
         <Features />
+        <CreatorServices />
         <About />
         <Collaborations />
         <Contact />
