@@ -8,6 +8,7 @@ import Contact from "../components/Contact";
 import Footer from "../components/Footer";
 import Collaborations from "../components/Collaborations";
 import CreatorServices from "../components/CreatorServices";
+import ImageGallery from "../components/ImageGallery";
 
 export default function Page() {
   return (
@@ -24,6 +25,7 @@ export default function Page() {
       <Navbar />
       <main>
         <Hero />
+        <ImageGallery />
         <Features />
         <CreatorServices />
         <About />
