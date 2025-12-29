@@ -9,6 +9,7 @@ import Footer from "../components/Footer";
 import Collaborations from "../components/Collaborations";
 import CreatorServices from "../components/CreatorServices";
 import ImageGallery from "../components/ImageGallery";
+import VideoShowcase from "../components/VideoShowCase";
 
 export default function Page() {
   return (
@@ -26,6 +27,7 @@ export default function Page() {
       <main>
         <Hero />
         <ImageGallery />
+        <VideoShowcase  />
         <Features />
         <CreatorServices />
         <About />
