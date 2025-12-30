@@ -1,105 +1,128 @@
-// components/Features.jsx
 "use client";
 
 import { useEffect, useState } from "react";
-import { BEFORE_AFTER_SECTIONS } from "./videoData"; // adjust path if needed
+
+const SHEET_URL = `https://opensheet.elk.sh/${process.env.NEXT_PUBLIC_SPREADSHEET_ID}/before_&_after`;
 
 export default function BeforeAndAfter() {
+  const [sections, setSections] = useState([]);
   const [activeTab, setActiveTab] = useState("before_after");
 
-  // For modal
+  // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const [direction, setDirection] = useState("next"); // "next" | "prev"
+  const [direction, setDirection] = useState("next");
 
-  const activeSectionIndex = BEFORE_AFTER_SECTIONS.findIndex(
+  /* ----------------------------------------
+     Fetch Before & After videos
+  ---------------------------------------- */
+  useEffect(() => {
+    async function fetchVideos() {
+      const res = await fetch(SHEET_URL);
+      const data = await res.json();
+
+      // 🔒 Normalize opensheet response
+      const rows = Array.isArray(data) ? data : [data];
+
+      const grouped = {};
+
+      rows.forEach((row) => {
+        if (
+          row.section_key !== "before_after" ||
+          !row.youtube_id
+        )
+          return;
+
+        if (!grouped[row.section_key]) {
+          grouped[row.section_key] = {
+            key: row.section_key,
+            label: row.section_label,
+            videos: [],
+          };
+        }
+
+        const youtubeId = row.youtube_id.trim();
+
+        grouped[row.section_key].videos.push({
+          id: Number(row.video_id),
+          title: row.title,
+          thumbnail_link: `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`,
+          video_link: `https://www.youtube.com/embed/${youtubeId}`,
+        });
+      });
+
+      const finalSections = Object.values(grouped);
+
+      setSections(finalSections);
+      setActiveTab(finalSections[0]?.key);
+    }
+
+    fetchVideos();
+  }, []);
+
+  if (!sections.length) {
+    return <p style={{ textAlign: "center" }}>Loading before & after…</p>;
+  }
+
+  /* ----------------------------------------
+     Derived state
+  ---------------------------------------- */
+  const activeSectionIndex = sections.findIndex(
     (sec) => sec.key === activeTab
   );
-  // Find the section based on activeTab
-  const activeSection =
-    BEFORE_AFTER_SECTIONS[activeSectionIndex] || BEFORE_AFTER_SECTIONS[0];
 
-  const modalSection =
-    BEFORE_AFTER_SECTIONS[currentSectionIndex] || BEFORE_AFTER_SECTIONS[0];
+  const activeSection = sections[activeSectionIndex];
+  const modalSection = sections[currentSectionIndex];
+  const currentVideo = modalSection?.videos[currentVideoIndex];
 
-  const currentVideo =
-    modalSection.videos && modalSection.videos[currentVideoIndex];
-
-  // Optional: keep your existing class syncing for active tabs if you rely on CSS
-  useEffect(() => {
-    const tabs = document.querySelectorAll(".tab-item");
-    tabs.forEach((t) => t.classList.remove("active"));
-
-    const activeTabEl = document.querySelector(
-      `.tab-item[data-tab="${activeTab}"]`
-    );
-    if (activeTabEl) activeTabEl.classList.add("active");
-  }, [activeTab]);
-
+  /* ----------------------------------------
+     Modal handlers
+  ---------------------------------------- */
   const openModal = (sectionIndex, videoIndex) => {
     setCurrentSectionIndex(sectionIndex);
     setCurrentVideoIndex(videoIndex);
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+  const closeModal = () => setIsModalOpen(false);
 
   const showNextVideo = () => {
     setDirection("next");
+    const section = sections[currentSectionIndex];
 
-    const section = BEFORE_AFTER_SECTIONS[currentSectionIndex];
-    if (!section || !section.videos?.length) return;
-
-    const isLastVideo = currentVideoIndex === section.videos.length - 1;
-
-    if (!isLastVideo) {
-      setCurrentVideoIndex(currentVideoIndex + 1);
+    if (currentVideoIndex < section.videos.length - 1) {
+      setCurrentVideoIndex((i) => i + 1);
     } else {
-      const nextSectionIndex =
-        (currentSectionIndex + 1) % BEFORE_AFTER_SECTIONS.length;
-      setCurrentSectionIndex(nextSectionIndex);
       setCurrentVideoIndex(0);
     }
   };
 
   const showPrevVideo = () => {
     setDirection("prev");
+    const section = sections[currentSectionIndex];
 
-    const section = BEFORE_AFTER_SECTIONS[currentSectionIndex];
-    if (!section || !section.videos?.length) return;
-
-    const isFirstVideo = currentVideoIndex === 0;
-
-    if (!isFirstVideo) {
-      setCurrentVideoIndex(currentVideoIndex - 1);
+    if (currentVideoIndex > 0) {
+      setCurrentVideoIndex((i) => i - 1);
     } else {
-      const prevSectionIndex =
-        (currentSectionIndex - 1 + BEFORE_AFTER_SECTIONS.length) %
-        BEFORE_AFTER_SECTIONS.length;
-
-      const prevSection = BEFORE_AFTER_SECTIONS[prevSectionIndex];
-      const lastIndex = (prevSection?.videos?.length || 1) - 1;
-
-      setCurrentSectionIndex(prevSectionIndex);
-      setCurrentVideoIndex(lastIndex);
+      setCurrentVideoIndex(section.videos.length - 1);
     }
   };
 
+  /* ----------------------------------------
+     Render
+  ---------------------------------------- */
   return (
-    <section className="features" id="features">
+    <section className="features" id="before-after">
       <h2 className="section-title">BEFORE & AFTER</h2>
 
       <div className="features-container">
-
-        {/* Content: Thumbnails grid */}
         <div className="feature-content">
           <div className="content-panel active">
             <h3>{activeSection.label}</h3>
+
             <div className="video-grid">
-              {activeSection.videos?.map((video, index) => (
+              {activeSection.videos.map((video, index) => (
                 <div
                   key={video.id}
                   className="video-thumbnail-wrapper"
@@ -123,34 +146,13 @@ export default function BeforeAndAfter() {
         </div>
       </div>
 
-      {/* Modal for video player */}
+      {/* Modal */}
       {isModalOpen && currentVideo && (
         <div className="video-modal-backdrop" onClick={closeModal}>
           <div className="video-modal" onClick={(e) => e.stopPropagation()}>
             <button className="modal-close-btn" onClick={closeModal}>
               ✕
             </button>
-
-            {/* Section label on top */}
-            {/* <h2 className="modal-section-label">{modalSection.label}</h2> */}
-
-            {/* Scrollable label chips row */}
-            <div className="modal-labels-row">
-              {/* {BEFORE_AFTER_SECTIONS.map((sec, idx) => (
-                <button
-                  key={sec.key}
-                  className={`modal-label-chip ${
-                    idx === currentSectionIndex ? "active" : ""
-                  }`}
-                  onClick={() => {
-                    setCurrentSectionIndex(idx);
-                    setCurrentVideoIndex(0); // start from first video of that label
-                  }}
-                >
-                  {sec.label}
-                </button>
-              ))} */}
-            </div>
 
             <div className="video-modal-content">
               <button
@@ -168,7 +170,7 @@ export default function BeforeAndAfter() {
                   src={currentVideo.video_link}
                   title={currentVideo.title}
                   allowFullScreen
-                ></iframe>
+                />
                 <p className="modal-video-title">{currentVideo.title}</p>
               </div>
 

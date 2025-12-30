@@ -1,43 +1,83 @@
-// components/ImageGallery.jsx
 "use client";
 
-import { useState } from "react";
-import { IMAGE_SECTIONS } from "./ImageCollection";
+import { useEffect, useState } from "react";
+
+const SHEET_URL = `https://opensheet.elk.sh/${process.env.NEXT_PUBLIC_SPREADSHEET_ID}/thumbnails`;
 
 export default function ImageGallery() {
-  const [activeTab, setActiveTab] = useState(IMAGE_SECTIONS[0].key);
+  const [sections, setSections] = useState([]);
+  const [activeTab, setActiveTab] = useState("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [direction, setDirection] = useState("next");
 
-  const activeSectionIndex = IMAGE_SECTIONS.findIndex(
-    (s) => s.key === activeTab
-  );
+  useEffect(() => {
+    async function fetchImages() {
+      const res = await fetch(SHEET_URL);
+      const data = await res.json();
 
-  const activeSection = IMAGE_SECTIONS[activeSectionIndex] || IMAGE_SECTIONS[0];
+      // 🔒 Normalize response (IMPORTANT)
+      const rows = Array.isArray(data) ? data : [data];
 
-  const modalSection = IMAGE_SECTIONS[currentSectionIndex] || IMAGE_SECTIONS[0];
+      const grouped = {};
 
-  const currentImage =
-    modalSection.images && modalSection.images[currentImageIndex];
+      rows.forEach((row) => {
+        if (!row.section_key || !row.thumbnail_id) return;
+
+        if (!grouped[row.section_key]) {
+          grouped[row.section_key] = {
+            key: row.section_key,
+            label: row.section_label,
+            images: [],
+          };
+        }
+
+        const videoId = row.thumbnail_id.trim();
+
+        grouped[row.section_key].images.push({
+          id: Number(row.image_id),
+          title: row.title,
+          thumbnail: `https://img.youtube.com/vi/${videoId}/sddefault.jpg`,
+          hd: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+        });
+      });
+
+      const finalSections = Object.values(grouped);
+
+      setSections(finalSections);
+      setActiveTab(finalSections[0]?.key);
+    }
+
+    fetchImages();
+  }, []);
+
+  if (!sections.length) {
+    return <p style={{ textAlign: "center" }}>Loading gallery...</p>;
+  }
+
+  const activeSectionIndex = sections.findIndex((s) => s.key === activeTab);
+  const activeSection = sections[activeSectionIndex];
+  const modalSection = sections[currentSectionIndex];
+  const currentImage = modalSection?.images[currentImageIndex];
 
   const openModal = (sectionIndex, imageIndex) => {
     setCurrentSectionIndex(sectionIndex);
     setCurrentImageIndex(imageIndex);
     setIsModalOpen(true);
   };
+
   const closeModal = () => setIsModalOpen(false);
 
   const showNext = () => {
     setDirection("next");
-    const section = IMAGE_SECTIONS[currentSectionIndex];
+    const section = sections[currentSectionIndex];
 
     if (currentImageIndex < section.images.length - 1) {
       setCurrentImageIndex((i) => i + 1);
     } else {
-      const nextSection = (currentSectionIndex + 1) % IMAGE_SECTIONS.length;
+      const nextSection = (currentSectionIndex + 1) % sections.length;
       setCurrentSectionIndex(nextSection);
       setCurrentImageIndex(0);
     }
@@ -45,16 +85,14 @@ export default function ImageGallery() {
 
   const showPrev = () => {
     setDirection("prev");
-    const section = IMAGE_SECTIONS[currentSectionIndex];
+    const section = sections[currentSectionIndex];
 
     if (currentImageIndex > 0) {
       setCurrentImageIndex((i) => i - 1);
     } else {
       const prevSection =
-        (currentSectionIndex - 1 + IMAGE_SECTIONS.length) %
-        IMAGE_SECTIONS.length;
-      const lastIndex = IMAGE_SECTIONS[prevSection].images.length - 1;
-
+        (currentSectionIndex - 1 + sections.length) % sections.length;
+      const lastIndex = sections[prevSection].images.length - 1;
       setCurrentSectionIndex(prevSection);
       setCurrentImageIndex(lastIndex);
     }
@@ -67,7 +105,7 @@ export default function ImageGallery() {
       <div className="features-container">
         {/* Tabs */}
         <div className="modal-labels-row">
-          {IMAGE_SECTIONS.map((section) => (
+          {sections.map((section) => (
             <button
               key={section.key}
               className={`modal-label-chip ${
@@ -76,7 +114,7 @@ export default function ImageGallery() {
               onClick={() => {
                 setActiveTab(section.key);
                 setCurrentSectionIndex(
-                  IMAGE_SECTIONS.findIndex((s) => s.key === section.key)
+                  sections.findIndex((s) => s.key === section.key)
                 );
                 setCurrentImageIndex(0);
               }}
@@ -88,27 +126,23 @@ export default function ImageGallery() {
 
         {/* Grid */}
         <div className="feature-content">
-          <div className="content-panel active">
-            <h3>{activeSection.label}</h3>
+          <h3>{activeSection.label}</h3>
 
-            <div className="video-grid">
-              {activeSection.images.map((img, index) => (
-                <div
-                  key={img.id}
-                  className="video-thumbnail-wrapper"
-                  onClick={() => openModal(activeSectionIndex, index)}
-                >
-                  <div className="thumbnail-overlay">
-                    <img
-                      src={img.thumbnail}
-                      alt={img.title}
-                      className="video-thumbnail"
-                    />
-                  </div>
-                  <p className="video-title">{img.title}</p>
-                </div>
-              ))}
-            </div>
+          <div className="video-grid">
+            {activeSection.images.map((img, index) => (
+              <div
+                key={img.id}
+                className="video-thumbnail-wrapper"
+                onClick={() => openModal(activeSectionIndex, index)}
+              >
+                <img
+                  src={img.thumbnail}
+                  alt={img.title}
+                  className="video-thumbnail"
+                />
+                <p className="video-title">{img.title}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -121,40 +155,16 @@ export default function ImageGallery() {
               ✕
             </button>
 
-            {/* Section chips */}
-            <div className="modal-labels-row">
-              {IMAGE_SECTIONS.map((sec, idx) => (
-                <button
-                  key={sec.key}
-                  className={`modal-label-chip ${
-                    idx === currentSectionIndex ? "active" : ""
-                  }`}
-                  onClick={() => {
-                    setCurrentSectionIndex(idx);
-                    setCurrentImageIndex(0);
-                  }}
-                >
-                  {sec.label}
-                </button>
-              ))}
-            </div>
-
             <div className="video-modal-content">
               <button className="modal-nav-btn" onClick={showPrev}>
                 ‹
               </button>
 
-              <div
-                key={`${currentSectionIndex}-${currentImageIndex}`}
-                className={`video-iframe-wrapper slide-${direction}`}
-              >
+              <div className={`video-iframe-wrapper slide-${direction}`}>
                 <img
                   src={currentImage.hd}
                   alt={currentImage.title}
-                  style={{
-                    width: "100%",
-                    borderRadius: "8px",
-                  }}
+                  style={{ width: "100%", borderRadius: "8px" }}
                 />
                 <p className="modal-video-title">{currentImage.title}</p>
               </div>

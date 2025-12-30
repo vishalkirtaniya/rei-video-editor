@@ -1,93 +1,118 @@
-// components/Features.jsx
 "use client";
 
 import { useEffect, useState } from "react";
-import { FEATURE_SECTIONS } from "./videoData"; // adjust path if needed
+
+const SHEET_URL = `https://opensheet.elk.sh/${process.env.NEXT_PUBLIC_SPREADSHEET_ID}/Videos`;
 
 export default function Features() {
-  const [activeTab, setActiveTab] = useState("performance");
+  const [sections, setSections] = useState([]);
+  const [activeTab, setActiveTab] = useState("");
 
-  // For modal
+  // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const [direction, setDirection] = useState("next"); // "next" | "prev"
+  const [direction, setDirection] = useState("next");
 
-  const activeSectionIndex = FEATURE_SECTIONS.findIndex(
-    (sec) => sec.key === activeTab
-  );
-  // Find the section based on activeTab
-  const activeSection =
-    FEATURE_SECTIONS[activeSectionIndex] || FEATURE_SECTIONS[0];
-
-  const modalSection =
-    FEATURE_SECTIONS[currentSectionIndex] || FEATURE_SECTIONS[0];
-
-  const currentVideo =
-    modalSection.videos && modalSection.videos[currentVideoIndex];
-
-  // Optional: keep your existing class syncing for active tabs if you rely on CSS
+  /* ----------------------------------------
+     Fetch videos from Google Sheet
+  ---------------------------------------- */
   useEffect(() => {
-    const tabs = document.querySelectorAll(".tab-item");
-    tabs.forEach((t) => t.classList.remove("active"));
+    async function fetchVideos() {
+      const res = await fetch(SHEET_URL);
+      const data = await res.json();
 
-    const activeTabEl = document.querySelector(
-      `.tab-item[data-tab="${activeTab}"]`
-    );
-    if (activeTabEl) activeTabEl.classList.add("active");
-  }, [activeTab]);
+      // 🔒 Normalize response
+      const rows = Array.isArray(data) ? data : [data];
 
+      const grouped = {};
+
+      rows.forEach((row) => {
+        if (!row.section_key || !row.youtube_id) return;
+
+        if (!grouped[row.section_key]) {
+          grouped[row.section_key] = {
+            key: row.section_key,
+            label: row.section_label,
+            videos: [],
+          };
+        }
+
+        const youtubeId = row.youtube_id.trim();
+
+        grouped[row.section_key].videos.push({
+          id: Number(row.video_id),
+          title: row.title,
+          thumbnail_link: `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`,
+          video_link: `https://www.youtube.com/embed/${youtubeId}`,
+        });
+      });
+
+      const finalSections = Object.values(grouped);
+
+      setSections(finalSections);
+      setActiveTab(finalSections[0]?.key);
+    }
+
+    fetchVideos();
+  }, []);
+
+  if (!sections.length) {
+    return <p style={{ textAlign: "center" }}>Loading videos...</p>;
+  }
+
+  /* ----------------------------------------
+     Derived state
+  ---------------------------------------- */
+  const activeSectionIndex = sections.findIndex((sec) => sec.key === activeTab);
+
+  const activeSection = sections[activeSectionIndex];
+  const modalSection = sections[currentSectionIndex];
+  const currentVideo = modalSection?.videos[currentVideoIndex];
+
+  /* ----------------------------------------
+     Modal handlers
+  ---------------------------------------- */
   const openModal = (sectionIndex, videoIndex) => {
     setCurrentSectionIndex(sectionIndex);
     setCurrentVideoIndex(videoIndex);
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+  const closeModal = () => setIsModalOpen(false);
 
   const showNextVideo = () => {
     setDirection("next");
+    const section = sections[currentSectionIndex];
 
-    const section = FEATURE_SECTIONS[currentSectionIndex];
-    if (!section || !section.videos?.length) return;
-
-    const isLastVideo = currentVideoIndex === section.videos.length - 1;
-
-    if (!isLastVideo) {
-      setCurrentVideoIndex(currentVideoIndex + 1);
+    if (currentVideoIndex < section.videos.length - 1) {
+      setCurrentVideoIndex((i) => i + 1);
     } else {
-      const nextSectionIndex =
-        (currentSectionIndex + 1) % FEATURE_SECTIONS.length;
-      setCurrentSectionIndex(nextSectionIndex);
+      const nextSection = (currentSectionIndex + 1) % sections.length;
+      setCurrentSectionIndex(nextSection);
       setCurrentVideoIndex(0);
     }
   };
 
   const showPrevVideo = () => {
     setDirection("prev");
+    const section = sections[currentSectionIndex];
 
-    const section = FEATURE_SECTIONS[currentSectionIndex];
-    if (!section || !section.videos?.length) return;
-
-    const isFirstVideo = currentVideoIndex === 0;
-
-    if (!isFirstVideo) {
-      setCurrentVideoIndex(currentVideoIndex - 1);
+    if (currentVideoIndex > 0) {
+      setCurrentVideoIndex((i) => i - 1);
     } else {
-      const prevSectionIndex =
-        (currentSectionIndex - 1 + FEATURE_SECTIONS.length) %
-        FEATURE_SECTIONS.length;
+      const prevSection =
+        (currentSectionIndex - 1 + sections.length) % sections.length;
+      const lastIndex = sections[prevSection].videos.length - 1;
 
-      const prevSection = FEATURE_SECTIONS[prevSectionIndex];
-      const lastIndex = (prevSection?.videos?.length || 1) - 1;
-
-      setCurrentSectionIndex(prevSectionIndex);
+      setCurrentSectionIndex(prevSection);
       setCurrentVideoIndex(lastIndex);
     }
   };
 
+  /* ----------------------------------------
+     Render
+  ---------------------------------------- */
   return (
     <section className="features" id="features">
       <h2 className="section-title">EDITED TO PERFECTION</h2>
@@ -95,26 +120,32 @@ export default function Features() {
       <div className="features-container">
         {/* Tabs */}
         <div className="modal-labels-row">
-          {FEATURE_SECTIONS.map((section) => (
+          {sections.map((section) => (
             <div
               key={section.key}
               className={`modal-label-chip ${
                 activeTab === section.key ? "active" : ""
               }`}
-              data-tab={section.key}
-              onClick={() => setActiveTab(section.key)}
+              onClick={() => {
+                setActiveTab(section.key);
+                setCurrentSectionIndex(
+                  sections.findIndex((s) => s.key === section.key)
+                );
+                setCurrentVideoIndex(0);
+              }}
             >
               <span className="tab-icon">{section.label}</span>
             </div>
           ))}
         </div>
 
-        {/* Content: Thumbnails grid */}
+        {/* Thumbnails */}
         <div className="feature-content">
           <div className="content-panel active">
             <h3>{activeSection.label}</h3>
+
             <div className="video-grid">
-              {activeSection.videos?.map((video, index) => (
+              {activeSection.videos.map((video, index) => (
                 <div
                   key={video.id}
                   className="video-thumbnail-wrapper"
@@ -138,7 +169,7 @@ export default function Features() {
         </div>
       </div>
 
-      {/* Modal for video player */}
+      {/* Modal */}
       {isModalOpen && currentVideo && (
         <div className="video-modal-backdrop" onClick={closeModal}>
           <div className="video-modal" onClick={(e) => e.stopPropagation()}>
@@ -146,12 +177,9 @@ export default function Features() {
               ✕
             </button>
 
-            {/* Section label on top */}
-            {/* <h2 className="modal-section-label">{modalSection.label}</h2> */}
-
-            {/* Scrollable label chips row */}
+            {/* Section chips */}
             <div className="modal-labels-row">
-              {FEATURE_SECTIONS.map((sec, idx) => (
+              {sections.map((sec, idx) => (
                 <button
                   key={sec.key}
                   className={`modal-label-chip ${
@@ -159,7 +187,7 @@ export default function Features() {
                   }`}
                   onClick={() => {
                     setCurrentSectionIndex(idx);
-                    setCurrentVideoIndex(0); // start from first video of that label
+                    setCurrentVideoIndex(0);
                   }}
                 >
                   {sec.label}
@@ -183,7 +211,7 @@ export default function Features() {
                   src={currentVideo.video_link}
                   title={currentVideo.title}
                   allowFullScreen
-                ></iframe>
+                />
                 <p className="modal-video-title">{currentVideo.title}</p>
               </div>
 
