@@ -98,6 +98,14 @@ export default function Navbar() {
           </li>
           <li>
             <a
+              href="#gallery"
+              className={`nav-link ${activeId === "gallery" ? "active" : ""}`}
+            >
+              Images
+            </a>
+          </li>
+          <li>
+            <a
               href="#features"
               className={`nav-link ${activeId === "features" ? "active" : ""}`}
             >
