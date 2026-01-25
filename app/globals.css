@@ -179,7 +179,7 @@ body {
 }
 
 /* Navigation */
-nav {
+/* nav {
   position: fixed;
   top: 0;
   width: 100%;
@@ -189,7 +189,7 @@ nav {
   z-index: 1000;
   transition: all 0.3s ease;
   border-bottom: 1px solid rgba(255, 94, 0, 0.1);
-}
+} */
 
 nav.scrolled {
   padding: 15px 50px;
@@ -2021,5 +2021,59 @@ footer {
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+/* ---------- OUR GRAPHICS ---------- */
+
+.our-graphics {
+  padding: 120px 0;
+  background: #000;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* ---------- GRAPHICS CAROUSEL ---------- */
+
+.graphics-carousel-wrapper {
+  width: 100%;
+  overflow: hidden;
+  margin-top: 48px;
+}
+
+.graphics-carousel-track {
+  display: flex;
+  gap: 28px;
+  padding: 20px 0;
+  animation: graphicsScroll 30s linear infinite;
+}
+
+.graphics-carousel-wrapper:hover .graphics-carousel-track {
+  animation-play-state: paused;
+}
+
+.graphics-card {
+  min-width: 260px;
+  height: 360px;
+  background: #111;
+  border-radius: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.graphics-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------- GRAPHICS ANIMATION ---------- */
+
+@keyframes graphicsScroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
   }
 }

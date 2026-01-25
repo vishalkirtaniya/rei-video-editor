@@ -1,39 +1,24 @@
-// app/page.jsx
-import Navbar from "../components/Navbar";
-import ParticlesBackground from "../components/ParticlesBackground";
-import Hero from "../components/Hero";
-import Features from "../components/Features";
-import About from "../components/About";
-import Contact from "../components/Contact";
+import Header from "@/components/v2/Header";
+import Hero from "@/components/v2/Hero";
+import BeforeAfter from "..//components/v2/before_after";
+import RecentProjects from "../components/v2/recent_videos";
+import OurGraphics from "../components/v2/graphics";
+import OurServices from "../components/v2/services";
+import OurClients from "../components/v2/client";
+import ContactSection from "../components/v2/contact";
 import Footer from "../components/Footer";
-import Collaborations from "../components/Collaborations";
-import CreatorServices from "../components/CreatorServices";
-import ImageGallery from "../components/ImageGallery";
-import VideoShowcase from "../components/VideoShowCase";
 
 export default function Page() {
   return (
     <>
-      <ParticlesBackground />
-      <div className="gradient-overlay" />
-      <div className="scanlines" />
-      <div className="shapes-container">
-        <div className="shape shape-circle" />
-        <div className="shape shape-triangle" />
-        <div className="shape shape-square" />
-      </div>
-
-      <Navbar />
-      <main>
-        <Hero />
-        <ImageGallery />
-        <VideoShowcase  />
-        <Features />
-        <CreatorServices />
-        <About />
-        <Collaborations />
-        <Contact />
-      </main>
+      <Header />
+      <Hero />
+      <BeforeAfter />
+      <RecentProjects />
+      <OurGraphics />
+      <OurServices />
+      <OurClients />
+      <ContactSection />
       <Footer />
     </>
   );

@@ -4,7 +4,7 @@ export default function Footer() {
     <footer>
       <div className="footer-content">
         <p className="copyright">
-          © 2025 REI VIDEO EDITOR. All rights reserved. Building tomorrow,
+          © 2026 REI VIDEO EDITOR. All rights reserved. Building tomorrow,
           today.{" "}
         </p>
       </div>

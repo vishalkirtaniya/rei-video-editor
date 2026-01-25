@@ -8,7 +8,6 @@ export default function ContactSection() {
   const [state, handleSubmit] = useForm(formId);
   const [showPopup, setShowPopup] = useState(false);
 
-  // 🔥 Show popup when form succeeds
   useEffect(() => {
     if (state.succeeded) {
       setShowPopup(true);
@@ -18,10 +17,12 @@ export default function ContactSection() {
   return (
     <>
       <section className="contact" id="contact">
-        <h2 className="section-title">Get In <span className="red">Touch</span></h2>
+        <h2 className="section-title">
+          Get <span className="red">In Touch</span>
+        </h2>
 
         <div className="contact-container">
-          {/* Contact Form */}
+          {/* FORM */}
           <div className="contact-form">
             <form onSubmit={handleSubmit}>
               <div className="form-group">
@@ -33,31 +34,19 @@ export default function ContactSection() {
               <div className="form-group">
                 <label htmlFor="email">Email</label>
                 <input id="email" type="email" name="email" required />
-                <ValidationError
-                  prefix="Email"
-                  field="email"
-                  errors={state.errors}
-                />
+                <ValidationError prefix="Email" field="email" errors={state.errors} />
               </div>
 
               <div className="form-group">
                 <label htmlFor="subject">Subject</label>
                 <input id="subject" type="text" name="subject" required />
-                <ValidationError
-                  prefix="Subject"
-                  field="subject"
-                  errors={state.errors}
-                />
+                <ValidationError prefix="Subject" field="subject" errors={state.errors} />
               </div>
 
               <div className="form-group">
                 <label htmlFor="message">Message</label>
                 <textarea id="message" name="message" required />
-                <ValidationError
-                  prefix="Message"
-                  field="message"
-                  errors={state.errors}
-                />
+                <ValidationError prefix="Message" field="message" errors={state.errors} />
               </div>
 
               <button
@@ -70,7 +59,7 @@ export default function ContactSection() {
             </form>
           </div>
 
-          {/* Contact Info */}
+          {/* CONTACT INFO */}
           <div className="contact-info">
             <h3>Connect With Us</h3>
 
@@ -96,26 +85,25 @@ export default function ContactSection() {
                 <p>Jaipur, India</p>
               </div>
             </div>
+
+            <p className="contact-note">
+              We usually respond within <strong>24 hours</strong>.  
+              Let’s build something impactful together.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* ✅ SUCCESS POPUP */}
+      {/* SUCCESS POPUP */}
       {showPopup && (
         <div className="popup-backdrop" onClick={() => setShowPopup(false)}>
-          <div
-            className="popup"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="popup" onClick={(e) => e.stopPropagation()}>
             <h3>Message Sent 🚀</h3>
             <p>
               Your message has been received.<br />
-              We’ll reach back to you as soon as we can.
+              We’ll reach back to you shortly.
             </p>
-            <button
-              className="popup-btn"
-              onClick={() => setShowPopup(false)}
-            >
+            <button className="popup-btn" onClick={() => setShowPopup(false)}>
               Close
             </button>
           </div>

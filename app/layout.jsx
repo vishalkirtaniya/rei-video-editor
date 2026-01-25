@@ -1,5 +1,5 @@
 // app/layout.jsx
-import "./globals.css";
+import "./globalsv2.css";
 import Head from "next/head";
 
 export const metadata = {
