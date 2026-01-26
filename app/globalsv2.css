@@ -1,4 +1,3 @@
-
 /* RESET */
 * {
   margin: 0;
@@ -15,60 +14,70 @@ body {
 /* ---------------- HEADER ---------------- */
 
 .header {
-  height: 72px;
+  height: 62px;
   width: 100%;
   padding: 0 48px;
+
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-between;
+
   position: fixed;
+  top: 0;
+  left: 0;
+
   background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(8px);      /* ✅ premium glass effect */
+  backdrop-filter: blur(8px);
   z-index: 1000;
 }
 
-
 .logo {
+  flex: 1;
   font-size: 30px;
   font-weight: 700;
   text-decoration: none;
   color: inherit;
+  white-space: nowrap;
 }
-
-
 
 .logo-red {
   color: #ff0000;
 }
 
 .nav {
+  flex: 1;
   display: flex;
-  gap: 32px;
+  justify-content: center;
   align-items: center;
-  margin-left: auto;   /* ✅ THIS IS THE KEY */
+  gap: 22px;
 }
 
 .nav a {
   color: #cfcfcf;
   text-decoration: none;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .nav a:hover {
   color: #fff;
 }
 
+.header-third {
+  flex: 1;
+}
 
 /* ---------------- BUTTONS ---------------- */
 
 .btn-primary {
-  background: #ff0000;
-  border: none;
   padding: 8px 18px;
-  border-radius: 20px;
-  color: #fff;
+  border-radius: 28px;
+  background: #ff0000;
+  border: 1px solid #ff0000;
+  color: #000000;
   font-weight: 500;
   cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
 }
 
 .btn-outline {
@@ -88,13 +97,18 @@ body {
 /* ---------------- HERO ---------------- */
 
 .hero {
-  min-height: calc(100vh - 72px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 0 20px;
+  margin: 150px;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
+    url("/images/hero-bg.png"); /* <-- your image path */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .hero-title {
@@ -132,13 +146,38 @@ body {
   }
 }
 
+/* ---------- TYPEWRITER ---------- */
+
+.typewriter {
+  display: inline-flex;
+  align-items: center;
+}
+
+.cursor {
+  margin-left: 2px;
+  animation: blink 1s infinite;
+  font-weight: 400;
+}
+
+@keyframes blink {
+  0%,
+  50%,
+  100% {
+    opacity: 1;
+  }
+  25%,
+  75% {
+    opacity: 0;
+  }
+}
+
 /* ---------- BEFORE & AFTER ---------- */
 
 .before-after {
-  padding: 120px 0;
   background: #000;
   text-align: center;
   overflow: hidden;
+  margin-bottom: 150px;
 }
 
 .section-title {
@@ -160,7 +199,8 @@ body {
 
 .carousel-wrapper {
   position: relative;
-  width: 100%;
+  width: 1220px;
+  margin: 0 auto;
   overflow: hidden;
 }
 
@@ -176,8 +216,8 @@ body {
   pointer-events: none;
   background: linear-gradient(
     to right,
-    #000 0%,
-    rgba(0, 0, 0, 0.85) 40%,
+    #000000 0%,
+    rgba(0, 0, 0, 0.64) 40%,
     rgba(0, 0, 0, 0) 100%
   );
 }
@@ -188,14 +228,14 @@ body {
   position: absolute;
   top: 0;
   right: 0;
-  width: 120px;
+  width: 100px;
   height: 100%;
   z-index: 2;
   pointer-events: none;
   background: linear-gradient(
     to left,
-    #000 0%,
-    rgba(0, 0, 0, 0.85) 40%,
+    #000000 0%,
+    rgba(0, 0, 0, 0.64) 40%,
     rgba(0, 0, 0, 0) 100%
   );
 }
@@ -303,11 +343,10 @@ body {
 /* ---------- RECENT PROJECTS ---------- */
 
 .recent-projects {
-  padding: 120px 0;
+  margin: 75px 0px;
   background: #000;
   text-align: center;
 }
-
 
 /* ---------- GRID ---------- */
 
@@ -327,7 +366,9 @@ body {
   color: white;
   overflow: hidden;
   border: 1px solid #1a1a1a;
-  transition: transform 0.25s ease, border-color 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease;
 }
 
 .project-card:hover {
@@ -578,10 +619,11 @@ body {
   cursor: pointer;
   border-radius: 24px;
   white-space: nowrap;
+  transition: color 0.25s ease;
 }
 
 .slider-tab.active {
-  color: #fff;
+  color: #000; /* 👈 black text on active tab */
 }
 
 .project-grid.short-form .project-card {
@@ -651,7 +693,7 @@ body {
 /* ---------- OUR GRAPHICS ---------- */
 
 .our-graphics {
-  padding: 120px 0;
+  margin: 150px 0;
   background: #000;
   text-align: center;
   overflow: hidden;
@@ -760,7 +802,7 @@ body {
 /* ---------- OUR SERVICES ---------- */
 
 .our-services {
-  padding: 140px 20px;
+  margin: 150px 0px;
   background: #000;
   text-align: center;
 }
@@ -798,7 +840,9 @@ body {
   border-radius: 28px;
   padding: 42px 32px;
   box-shadow: 0 0 60px rgba(255, 0, 0, 0.18);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .service-card:hover {
@@ -820,7 +864,6 @@ body {
   font-weight: 700;
   color: white;
 }
-
 
 /* ---------- TEXT ---------- */
 
@@ -857,7 +900,7 @@ body {
 /* ---------- OUR CLIENTS ---------- */
 
 .our-clients {
-  padding: 140px 20px;
+  margin: 150px 0px;
   background: #000;
   text-align: center;
 }
@@ -880,7 +923,9 @@ body {
   border-radius: 22px;
   padding: 28px 20px;
   text-decoration: none;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .client-card:hover {
@@ -948,7 +993,7 @@ body {
 ================================ */
 
 .contact {
-  padding: 120px 20px;
+  margin: 150px 0px;
   max-width: 1200px;
   margin: 0 auto;
   position: relative;
@@ -1093,6 +1138,7 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 1.4rem;
+  padding: 10px;
 }
 
 .info-details h4 {
@@ -1212,7 +1258,6 @@ footer {
   background: #000;
   border-top: 1px solid #1a1a1a;
   padding: 28px 20px;
-  box-shadow: inset 0 1px 0 rgba(255, 0, 0, 0.05);
 }
 
 .footer-content {

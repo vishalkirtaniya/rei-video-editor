@@ -28,25 +28,41 @@ export default function ContactSection() {
               <div className="form-group">
                 <label htmlFor="name">Name</label>
                 <input id="name" type="text" name="name" required />
-                <ValidationError prefix="Name" field="name" errors={state.errors} />
+                <ValidationError
+                  prefix="Name"
+                  field="name"
+                  errors={state.errors}
+                />
               </div>
 
               <div className="form-group">
                 <label htmlFor="email">Email</label>
                 <input id="email" type="email" name="email" required />
-                <ValidationError prefix="Email" field="email" errors={state.errors} />
+                <ValidationError
+                  prefix="Email"
+                  field="email"
+                  errors={state.errors}
+                />
               </div>
 
               <div className="form-group">
                 <label htmlFor="subject">Subject</label>
                 <input id="subject" type="text" name="subject" required />
-                <ValidationError prefix="Subject" field="subject" errors={state.errors} />
+                <ValidationError
+                  prefix="Subject"
+                  field="subject"
+                  errors={state.errors}
+                />
               </div>
 
               <div className="form-group">
                 <label htmlFor="message">Message</label>
                 <textarea id="message" name="message" required />
-                <ValidationError prefix="Message" field="message" errors={state.errors} />
+                <ValidationError
+                  prefix="Message"
+                  field="message"
+                  errors={state.errors}
+                />
               </div>
 
               <button
@@ -64,7 +80,7 @@ export default function ContactSection() {
             <h3>Connect With Us</h3>
 
             <div className="info-item">
-              <div className="info-icon">📱</div>
+              <img className="info-icon" src="/discord.svg" alt="Discord" />
               <div className="info-details">
                 <h4>Discord</h4>
                 <a
@@ -79,16 +95,53 @@ export default function ContactSection() {
             </div>
 
             <div className="info-item">
-              <div className="info-icon">📍</div>
+              <img className="info-icon" src="/mail.svg" alt="Email" />
               <div className="info-details">
-                <h4>Location</h4>
-                <p>Jaipur, India</p>
+                <h4>Email</h4>
+                <a
+                  href="mailto:xyz@gmail.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="contact-link"
+                >
+                  xyz@gmail.com
+                </a>
+              </div>
+            </div>
+
+            <div className="info-item">
+              <img className="info-icon" src="/phone.svg" alt="Phone" />
+              <div className="info-details">
+                <h4>Phone</h4>
+                <a
+                  href="tel:+91987654****"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="contact-link"
+                >
+                  +91 987654****
+                </a>
+              </div>
+            </div>
+
+            <div className="info-item">
+              <img className="info-icon" src="/insta.svg" alt="Instagram" />
+              <div className="info-details">
+                <h4>Instagram</h4>
+                <a
+                  href="https://www.instagram.com/reii_aep"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="contact-link"
+                >
+                  @reii_aep
+                </a>
               </div>
             </div>
 
             <p className="contact-note">
-              We usually respond within <strong>24 hours</strong>.  
-              Let’s build something impactful together.
+              We usually respond within <strong>24 hours</strong>. Let’s build
+              something impactful together.
             </p>
           </div>
         </div>
@@ -100,7 +153,8 @@ export default function ContactSection() {
           <div className="popup" onClick={(e) => e.stopPropagation()}>
             <h3>Message Sent 🚀</h3>
             <p>
-              Your message has been received.<br />
+              Your message has been received.
+              <br />
               We’ll reach back to you shortly.
             </p>
             <button className="popup-btn" onClick={() => setShowPopup(false)}>

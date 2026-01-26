@@ -1,10 +1,50 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+const WORDS = ["Business", "YouTube", "Instagram", "Socials"];
+const TYPING_SPEED = 120;
+const DELETING_SPEED = 70;
+const HOLD_TIME = 2800;
+
 export default function Hero() {
+  const [wordIndex, setWordIndex] = useState(0);
+  const [text, setText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentWord = WORDS[wordIndex];
+    let timeout;
+
+    if (!isDeleting && text.length < currentWord.length) {
+      timeout = setTimeout(
+        () => setText(currentWord.slice(0, text.length + 1)),
+        TYPING_SPEED
+      );
+    } else if (isDeleting && text.length > 0) {
+      timeout = setTimeout(
+        () => setText(currentWord.slice(0, text.length - 1)),
+        DELETING_SPEED
+      );
+    } else if (!isDeleting && text === currentWord) {
+      timeout = setTimeout(() => setIsDeleting(true), HOLD_TIME);
+    } else if (isDeleting && text === "") {
+      setIsDeleting(false);
+      setWordIndex((prev) => (prev + 1) % WORDS.length);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [text, isDeleting, wordIndex]);
   return (
     <section className="hero" id="hero">
       <h1 className="hero-title">
         <span className="red">Turn your vision to reality</span>
         <br />
-        with our help to scale ur <span className="red">Business</span>
+        with our help to scale your{" "}
+        <span className="red typewriter">
+          {text}
+          <span className="cursor">|</span>
+        </span>
       </h1>
 
       <p className="hero-subtitle">
