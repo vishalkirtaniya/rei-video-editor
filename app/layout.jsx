@@ -1,6 +1,8 @@
 // app/layout.jsx
 import "./globalsv2.css";
 import Head from "next/head";
+import Header from "../components/v2/Header"
+import Footer from "../components/Footer";
 
 export const metadata = {
   title: "Rei Video Editor",
@@ -17,7 +19,9 @@ export default function RootLayout({ children }) {
         />
       </Head>
       <body>
+        <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );

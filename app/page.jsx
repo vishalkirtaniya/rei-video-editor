@@ -10,8 +10,7 @@ import Footer from "../components/Footer";
 
 export default function Page() {
   return (
-    <>
-      <Header />
+    <div className="main-bg">
       <Hero />
       <BeforeAfter />
       <RecentProjects />
@@ -19,7 +18,6 @@ export default function Page() {
       <OurServices />
       <OurClients />
       <ContactSection />
-      <Footer />
-    </>
+    </div>
   );
 }

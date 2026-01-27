@@ -38,7 +38,7 @@ export default function Hero() {
   return (
     <section className="hero" id="hero">
       <h1 className="hero-title">
-        <span className="red">Turn your vision to reality</span>
+        Turn your <span className="red"> vision to reality</span>
         <br />
         with our help to scale your{" "}
         <span className="red typewriter">
