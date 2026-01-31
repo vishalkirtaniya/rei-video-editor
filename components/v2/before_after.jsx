@@ -78,6 +78,8 @@ export default function BeforeAfter() {
                     setActiveVideoId(isActive ? null : `${video.id}-${index}`)
                   }
                 >
+                  <div className="carousel-card-overlay">
+                  
                   {isActive ? (
                     <iframe
                       src={`https://www.youtube.com/embed/${video.youtubeId}?autoplay=1&rel=0`}
@@ -93,10 +95,11 @@ export default function BeforeAfter() {
                       <div className="play-icon">▶</div>
                     </>
                   )}
-                </div>
-
+                  </div>
                 {/* Title below card */}
                 <p className="carousel-title">{video.title}</p>
+                </div>
+
               </div>
             );
           })}

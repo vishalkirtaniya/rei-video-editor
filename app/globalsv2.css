@@ -6,11 +6,11 @@
 }
 
 :root {
-  --color-bg-dark: #0C0C0C;
-  --color-bg-light: #1D2838;
-  --color-shape-layer: #1D2838;
-  --color-text-light: #BBECFE;
-  --color-text-dark: #4C5ABB;
+  --color-bg-dark: #0c0c0c;
+  --color-bg-light: #1d2838;
+  --color-shape-layer: #1d2838;
+  --color-text-light: #bbecfe;
+  --color-text-dark: #4c5abb;
 }
 
 body {
@@ -20,11 +20,58 @@ body {
 }
 
 /* ---------- Main Background ---------- */
-.main-bg{
-  background: linear-gradient( var(--color-bg-dark) 0%, var(--color-bg-light) 100%);
+.main {
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.background{
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  height: 100svh;
+  background: linear-gradient( var(--color-bg-dark) 0%, var(--color-bg-light) 100% );
+}
+
+.main-bg {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 100px;
+}
+
+.background-img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: 3px solid red;
+}
+
+.content-container{
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+}
+
+.img-container{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  object-fit: cover;
+  pointer-events: none;
+  background-size: contain;
+  background-position: top;
+  background-repeat: no-repeat;
+  background-image: url("/images/hero_bg.png");
+  gap: 100px;
+  z-index: -1;
 }
 
 /* ---------------- HEADER ---------------- */
@@ -42,7 +89,7 @@ body {
   top: 0;
   left: 0;
 
-  background: linear-gradient( var(--color-bg-dark), var(--color-bg-light));
+  background: linear-gradient(var(--color-bg-dark), var(--color-bg-light));
   backdrop-filter: blur(8px);
   z-index: 1000;
 }
@@ -61,7 +108,7 @@ body {
 }
 
 .nav {
-  flex: 1;
+  flex: 3;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -123,7 +170,7 @@ body {
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-top: 150px;
+  padding-top: 150px;
    /* <-- your image path */
   background-size: cover;
   background-position: center;
@@ -134,6 +181,48 @@ body {
   font-size: 48px;
   font-weight: 800;
   line-height: 1.2;
+  color: var(--color-text-light);
+  
+}
+
+/* 🔴 MAIN RED / BLUE HERO TEXT */
+.hero-title {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.25;
+  text-align: center;
+  color: inherit;
+}
+
+
+.hero-line {
+  position: relative;
+  display: inline-block;
+}
+
+/* 🔥 strong glow */
+.hero-line::before {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  color: #6f86ff;
+  filter: blur(25px);
+  opacity: 0.35;
+}
+
+/* 🌫️ wide soft bloom */
+.hero-line::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  color: #6f86ff;
+  filter: blur(50px);
+  opacity: 0.15;
+}
+
+.red-hero{
   color: var(--color-text-dark);
 }
 
@@ -152,6 +241,7 @@ body {
   margin-top: 20px;
   display: flex;
   gap: 20px;
+  z-index: 2;
 }
 
 /* ---------------- RESPONSIVE ---------------- */
@@ -214,7 +304,7 @@ body {
 
 .carousel-wrapper {
   position: relative;
-  width: 1220px;
+  width: 100%;
   margin: 0 auto;
   overflow: hidden;
 }
@@ -229,12 +319,12 @@ body {
   height: 100%;
   z-index: 2;
   pointer-events: none;
-  background: linear-gradient(
+  /* background: linear-gradient(
     to right,
     #000000 0%,
     rgba(0, 0, 0, 0.64) 40%,
     rgba(0, 0, 0, 0) 100%
-  );
+  ); */
 }
 
 /* Right fade */
@@ -247,17 +337,17 @@ body {
   height: 100%;
   z-index: 2;
   pointer-events: none;
-  background: linear-gradient(
+  /* background: linear-gradient(
     to left,
     #000000 0%,
     rgba(0, 0, 0, 0.64) 40%,
     rgba(0, 0, 0, 0) 100%
-  );
+  ); */
 }
 
 .carousel-track {
   display: flex;
-  gap: 80px;
+  gap: 60px;
   animation: scroll 28s linear infinite;
 }
 
@@ -272,13 +362,26 @@ body {
   overflow: hidden;
   position: relative;
   cursor: pointer;
-  background: #111;
+  padding: 15px;
 }
 
-.carousel-card img {
+.carousel-card-overlay{
+  width: 100%;
+  height: 91%;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.carousel-card-overlay img {
   width: 100%;
   height: 100%;
+  scale: 105%;
   object-fit: cover;
+}
+
+.carousel-card-overlay:hover img {
+  scale: 110%;
+  transition: scale 0.3s ease;
 }
 
 .play-icon {
@@ -322,7 +425,7 @@ body {
 }
 
 .carousel-card.playing {
-  box-shadow: 0 0 40px var(--color-text-dark);
+  box-shadow: 0 0 10px var(--color-text-dark);
 }
 
 .carousel-card.playing .play-icon,
@@ -336,13 +439,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 240px;
+  margin: 10px 0;
 }
 
 /* Title text */
 .carousel-title {
   margin-top: 12px;
-  font-size: 14px;
+  font-size: 16px;
   color: inherit;
   text-align: center;
   max-width: 220px;
@@ -913,14 +1016,122 @@ body {
 
 /* ---------- GRID ---------- */
 
-.clients-grid {
-  margin-top: 30px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 40px;
-  max-width: 1000px;
-  margin-inline: auto;
+/* ---------- CLIENTS CAROUSEL ---------- */
+
+.clients-carousel-wrapper {
+  position: relative;
+  width: 100%;
+  margin: 40px auto 0;
+  overflow: hidden;
+  padding: 50px 0;
 }
+
+/* soft fades */
+.clients-carousel-track::before,
+.clients-carousel-track::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 120px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* .clients-carousel-wrapper::before {
+  left: 0;
+  background: linear-gradient(
+    to right,
+    #000 0%,
+    rgba(0, 0, 0, 0.6) 45%,
+    rgba(0, 0, 0, 0) 100%
+  );
+} */
+
+/* .clients-carousel-wrapper::after {
+  right: 0;
+  background: linear-gradient(
+    to left,
+    #000 0%,
+    rgba(0, 0, 0, 0.6) 45%,
+    rgba(0, 0, 0, 0) 100%
+  );
+} */
+
+.clients-carousel-track {
+  display: flex;
+  gap: 40px;
+  animation: clientsScroll 35s linear infinite;
+}
+
+.clients-carousel-wrapper:hover .clients-carousel-track {
+  animation-play-state: paused;
+}
+
+/* ---------- CARD ---------- */
+
+.client-card {
+  min-width: 280px;
+  background: #111;
+  border-radius: 22px;
+  padding: 28px 20px;
+  text-decoration: none;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.client-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 35px rgba(255, 0, 0, 0.25);
+}
+
+/* ---------- AVATAR ---------- */
+
+.client-avatar-wrapper {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #222;
+}
+
+.client-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.client-avatar-fallback {
+  width: 100%;
+  height: 100%;
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- NAME ---------- */
+
+.client-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* ---------- ANIMATION ---------- */
+
+@keyframes clientsScroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 
 /* ---------- CARD ---------- */
 
@@ -936,8 +1147,7 @@ body {
 
 .client-card:hover {
   transform: translateY(-6px);
-    box-shadow: 0 0 30px var(--color-text-light, 0.18);
-
+  box-shadow: 0 0 30px var(--color-text-light, 0.18);
 }
 
 /* ---------- AVATAR ---------- */
@@ -1032,7 +1242,7 @@ body {
   border-radius: 16px;
   padding: 40px;
   backdrop-filter: blur(12px);
-  box-shadow: 0 20px 40px var(--color-text-dark , 0.2);
+  box-shadow: 0 20px 40px var(--color-text-dark, 0.2);
 }
 
 .form-group {
@@ -1083,7 +1293,11 @@ body {
   width: 100%;
   padding: 14px;
   margin-top: 10px;
-  background: linear-gradient(135deg, var(--color-text-light), var(--color-text-dark));
+  background: linear-gradient(
+    135deg,
+    var(--color-text-light),
+    var(--color-text-dark)
+  );
   color: var(--color-text-dark);
   border: none;
   border-radius: 999px;
@@ -1120,7 +1334,11 @@ body {
   font-size: 1.9rem;
   margin-bottom: 30px;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--color-text-light), var(--color-text-dark));
+  background: linear-gradient(
+    135deg,
+    var(--color-text-light),
+    var(--color-text-dark)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -1140,7 +1358,11 @@ body {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-text-light), var(--color-text-dark));
+  background: linear-gradient(
+    135deg,
+    var(--color-text-light),
+    var(--color-text-dark)
+  );
   display: flex;
   align-items: center;
   justify-content: center;

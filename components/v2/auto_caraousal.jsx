@@ -30,6 +30,7 @@ export default function AutoCarousel({ videos }) {
                   setActiveVideoId(isActive ? null : `${video.id}-${index}`)
                 }
               >
+                 <div className="carousel-card-overlay">
                 {isActive ? (
                   <iframe
                     src={`https://www.youtube.com/embed/${video.youtubeId}?autoplay=1&rel=0`}
@@ -45,9 +46,10 @@ export default function AutoCarousel({ videos }) {
                     <div className="play-icon">▶</div>
                   </>
                 )}
+                </div>
+              <p className="carousel-title">{video.title}</p>
               </div>
 
-              <p className="carousel-title">{video.title}</p>
             </div>
           );
         })}

@@ -19,12 +19,12 @@ export default function Hero() {
     if (!isDeleting && text.length < currentWord.length) {
       timeout = setTimeout(
         () => setText(currentWord.slice(0, text.length + 1)),
-        TYPING_SPEED
+        TYPING_SPEED,
       );
     } else if (isDeleting && text.length > 0) {
       timeout = setTimeout(
         () => setText(currentWord.slice(0, text.length - 1)),
-        DELETING_SPEED
+        DELETING_SPEED,
       );
     } else if (!isDeleting && text === currentWord) {
       timeout = setTimeout(() => setIsDeleting(true), HOLD_TIME);
@@ -38,12 +38,21 @@ export default function Hero() {
   return (
     <section className="hero" id="hero">
       <h1 className="hero-title">
-        Turn your <span className="red"> vision to reality</span>
+        <span className="hero-line" data-text="Turn your vision to reality">
+          Turn your <span className="red-hero">vision to reality</span>
+        </span>
+
         <br />
-        with our help to scale your{" "}
-        <span className="red typewriter">
-          {text}
-          <span className="cursor">|</span>
+
+        <span
+          className="hero-line"
+          data-text={`with our help to scale your ${text}`}
+        >
+          with our help to scale your{" "}
+          <span className="red-hero typewriter">
+            {text}
+            <span className="cursor">|</span>
+          </span>
         </span>
       </h1>
 
