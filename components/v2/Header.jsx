@@ -10,7 +10,9 @@ export default function Header() {
       <nav className="nav">
         <a href="#before-after">Before & After</a>
         <a href="#recent-projects">Projects</a>
-        <a href="#graphics">Graphics</a>
+        <a href="#graphics-thumbnails">Thumbnails</a>
+        <a href="#graphics-carousels">Carousel</a>
+        {/* <a href="#graphics">Graphics</a> */}
         <a href="#services">Services</a>
         <a href="#clients">Clients</a>
         <a href="#contact" className="btn-primary">
